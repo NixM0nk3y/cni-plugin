@@ -34,6 +34,9 @@ ARCH ?= $(BUILDARCH)
 ifeq ($(ARCH),aarch64)
         override ARCH=arm64
 endif
+ifeq ($(ARCH),armv7)
+        override ARCH=arm
+endif
 ifeq ($(ARCH),x86_64)
         override ARCH=amd64
 endif
@@ -151,7 +154,7 @@ $(BIN)/calico $(BIN)/calico-ipam: $(SRCFILES) vendor
 	-mkdir -p .go-pkg-cache
 	docker run --rm \
 	-e ARCH=$(ARCH) \
-	-e GOARCH=$(ARCH) \
+	-e GOARCH=$(ARCH) -e GOARM=7 \
 	-e LOCAL_USER_ID=$(LOCAL_USER_ID) \
 	-v $(CURDIR):/go/src/$(PACKAGE_NAME):ro \
 	-v $(CURDIR)/$(BIN):/go/src/$(PACKAGE_NAME)/$(BIN) \
